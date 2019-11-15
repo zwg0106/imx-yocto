@@ -1,0 +1,24 @@
+From 9ca1a787acfc63c1905720b7bfb274f357fd054c Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Thu, 7 Nov 2019 15:45:47 +0800
+Subject: [PATCH 8/8] usb patch
+
+---
+ drivers/usb/serial/option.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 1799aa0..91f6b4b 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -693,6 +693,7 @@ static const struct option_blacklist_info yuga_clm920_nc5_blacklist = {
+ };
+ 
+ static const struct usb_device_id option_ids[] = {
++    { USB_DEVICE(0x2c7c, 0x0125) },
+ 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_COLT) },
+ 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_RICOLA) },
+ 	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_RICOLA_LIGHT) },
+-- 
+2.7.4
+

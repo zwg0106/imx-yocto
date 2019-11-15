@@ -1,0 +1,26 @@
+From b2a8f0e5a53039a5e0bb720ff90ffae775247d89 Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Thu, 7 Nov 2019 15:54:06 +0800
+Subject: [PATCH 10/10] bcm43430 patch
+
+---
+ net/rfkill/rfkill-gpio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/rfkill/rfkill-gpio.c b/net/rfkill/rfkill-gpio.c
+index 76c01cb..3f44af6 100644
+--- a/net/rfkill/rfkill-gpio.c
++++ b/net/rfkill/rfkill-gpio.c
+@@ -161,7 +161,8 @@ static int rfkill_gpio_remove(struct platform_device *pdev)
+ 
+ #ifdef CONFIG_ACPI
+ static const struct acpi_device_id rfkill_acpi_match[] = {
+-	{ "BCM4752", RFKILL_TYPE_GPS },
++    { "BCMA9A6", RFKILL_TYPE_BLUETOOTH },    // bcm43430
++    { "BCM4752", RFKILL_TYPE_GPS },
+ 	{ "LNV4752", RFKILL_TYPE_GPS },
+ 	{ },
+ };
+-- 
+2.7.4
+

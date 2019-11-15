@@ -1,0 +1,28 @@
+diff --git a/opentftpd.cpp b/opentftpd.cpp
+index c18db96..b4312b6 100755
+--- a/opentftpd.cpp
++++ b/opentftpd.cpp
+@@ -2484,9 +2484,9 @@ void logMess(request *req, MYBYTE logLevel)
+ 		strftime(extbuff, sizeof(extbuff), "%d-%b-%y %X", ttm);
+ 
+ 		if (req->path[0])
+-			fprintf(cfig.logfile, "[%s] Client %s:%u %s, %s\n", extbuff, IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port), req->path, req->serverError.errormessage);
++			fprintf(cfig.logfile, "[%s] Client %s:%u %s, %u %u %s\n", extbuff, IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port), req->path, req->serverError.opcode, req->serverError.errorcode, req->serverError.errormessage);
+ 		else
+-			fprintf(cfig.logfile, "[%s] Client %s:%u, %s\n", extbuff, IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port), req->serverError.errormessage);
++			fprintf(cfig.logfile, "[%s] Client %s:%u, %u %u %s\n", extbuff, IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port), req->serverError.opcode, req->serverError.errorcode, req->serverError.errormessage);
+ 
+ 		fflush(cfig.logfile);
+ 	}
+@@ -2498,9 +2498,9 @@ void logMess(request *req, MYBYTE logLevel)
+ 			sprintf(req->serverError.errormessage, strerror(errno));
+ 
+ 		if (req->path[0])
+-			sprintf(logBuff, "Client %s:%u %s, %s\n", IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port), req->path, req->serverError.errormessage);
++			sprintf(logBuff, "Client %s:%u %s, %u %u %s\n", IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port), req->path, req->serverError.opcode, req->serverError.errorcode, req->serverError.errormessage);
+ 		else
+-			sprintf(logBuff, "Client %s:%u, %s\n", IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port), req->serverError.errormessage);
++			sprintf(logBuff, "Client %s:%u, %u %u %s\n", IP2String(tempbuff, req->client.sin_addr.s_addr), ntohs(req->client.sin_port),req->serverError.opcode, req->serverError.errorcode, req->serverError.errormessage);
+ 
+ 		syslog(LOG_MAKEPRI(LOG_LOCAL1, LOG_CRIT), logBuff);
+ 	}

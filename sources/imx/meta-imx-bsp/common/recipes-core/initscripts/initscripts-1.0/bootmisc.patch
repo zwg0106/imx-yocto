@@ -1,0 +1,11 @@
+--- 1.0-r155.3.orig/bootmisc.sh	2019-11-08 13:01:22.659691995 +0800
++++ 1.0-r155.3/bootmisc.sh	2019-11-08 13:01:39.636427532 +0800
+@@ -78,4 +78,8 @@
+ 		test -x /etc/init.d/hwclock.sh && /etc/init.d/hwclock.sh stop
+ 	fi
+ fi
++
++mkdir -pv /var/core
++mount /var/core
++
+ : exit 0

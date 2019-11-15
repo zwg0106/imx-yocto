@@ -1,0 +1,74 @@
+Index: git/makeself-header.sh
+===================================================================
+--- git.orig/makeself-header.sh
++++ git/makeself-header.sh
+@@ -134,6 +134,7 @@ Makeself version $MS_VERSION
+   --noexec              Do not run embedded script
+   --keep                Do not erase target directory after running
+ 			the embedded script
++  --lowmem              Use minimal memory (requires uncompressed archive)
+   --noprogress          Do not show the progress during the decompression
+   --nox11               Do not spawn an xterm
+   --nochown             Do not give the extracted files to the current user
+@@ -202,11 +203,15 @@ MS_Check()
+ 
+ UnTAR()
+ {
++    if [ \$2 ]; then
++        f=\$2
++    else
++        f="-"
++    fi
+     if test "\$quiet" = "n"; then
+-    	tar \$1vf - 2>&1 || { echo Extraction failed. > /dev/tty; kill -15 \$$; }
++    	tar \$1vf \$f 2>&1 || { echo Extraction failed. > /dev/tty; kill -15 \$$; }
+     else
+-
+-    	tar \$1f - 2>&1 || { echo Extraction failed. > /dev/tty; kill -15 \$$; }
++    	tar \$1f \$f 2>&1 || { echo Extraction failed. > /dev/tty; kill -15 \$$; }
+     fi
+ }
+ 
+@@ -313,6 +318,10 @@ EOLSM
+ 	keep=y
+ 	shift
+ 	;;
++    --lowmem)
++    lowmem=y
++    shift
++    ;;
+     --target)
+ 	keep=y
+ 	targetdir=\${2:-.}
+@@ -438,7 +447,7 @@ if test x"\$verbose" = xy; then
+ fi
+ 
+ if test "\$quiet" = "n";then
+-	MS_Printf "Uncompressing \$label"
++	MS_Printf "Uncompressing \$label\n"
+ fi
+ res=3
+ if test "\$keep" = n; then
+@@ -459,7 +468,21 @@ fi
+ 
+ for s in \$filesizes
+ do
+-    if MS_dd_Progress "\$0" \$offset \$s | eval "$GUNZIP_CMD" | ( cd "\$tmpdir"; UnTAR x ) 1>/dev/null; then
++    if test "\$lowmem" = y; then
++        #echo "\$PWD - for tail -c  ofs=\$offset size=\$s"
++        let ofs=\$offset+1
++        if test "\$quiet" = "n";then
++            MS_Printf "Extracting tarfile\n"
++        fi
++        tail -c +\$ofs \$0 > \$tmpdir/tarfile
++        if test "\$quiet" = "n";then
++            MS_Printf "Restoring components from tarfile\n"
++        fi
++        (cd "\$tmpdir" && UnTAR x tarfile && rm tarfile)
++    else
++        MS_dd_Progress "\$0" \$offset \$s | eval "$GUNZIP_CMD" | ( cd "\$tmpdir"; UnTAR x ) 1>/dev/null
++    fi
++    if [ $? -eq 0 ]; then
+ 		if test x"\$ownership" = xy; then
+ 			(PATH=/usr/xpg4/bin:\$PATH; cd "\$tmpdir"; chown -R \`id -u\` .;  chgrp -R \`id -g\` .)
+ 		fi

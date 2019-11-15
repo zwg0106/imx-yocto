@@ -1,0 +1,62 @@
+diff --git a/opentftpd.cpp b/opentftpd.cpp
+index 146bbc8..5b117f6 100755
+--- a/opentftpd.cpp
++++ b/opentftpd.cpp
+@@ -1393,6 +1393,27 @@ void *processRequest(void *lpParam)
+ 	}
+ 	while (cleanReq(&req));
+ 
++    // cleanup fd, mem resource only for "break" case
++	if (req.file) {
++		fclose(req.file);
++        req.file = NULL;
++    }
++
++	if (req.sock >= 0) {
++		close(req.sock);
++        req.sock = -1;
++    }
++
++	if (req.pkt[0]) {
++		free(req.pkt[0]);
++        req.pkt[0] = NULL;
++    }
++
++	if (req.pkt[1]) {
++		free(req.pkt[1]);
++        req.pkt[1] = NULL;
++    }
++
+ 	pthread_mutex_lock( &mutCount );
+ 	totalThreads--;
+ 	pthread_mutex_unlock( &mutCount );
+@@ -1404,17 +1425,25 @@ bool cleanReq(request* req)
+ {
+ 	//printf("cleaning\n");
+ 
+-	if (req->file)
++	if (req->file) {
+ 		fclose(req->file);
++        req->file = NULL;
++    }
+ 
+-	if (req->sock >= 0)
++	if (req->sock >= 0) {
+ 		close(req->sock);
++        req->sock = -1;
++    }
+ 
+-	if (req->pkt[0])
++	if (req->pkt[0]) {
+ 		free(req->pkt[0]);
++        req->pkt[0] = NULL;
++    }
+ 
+-	if (req->pkt[1])
++	if (req->pkt[1]) {
+ 		free(req->pkt[1]);
++        req->pkt[1] = NULL;
++    }
+ 
+ 	pthread_mutex_lock( &mutCount );
+ 	activeThreads--;

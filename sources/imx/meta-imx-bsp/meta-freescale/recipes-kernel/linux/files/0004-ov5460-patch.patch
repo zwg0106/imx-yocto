@@ -1,0 +1,43 @@
+From e19083dbddd9b5306d8d58f0abb786e063ab76cc Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Thu, 7 Nov 2019 15:38:33 +0800
+Subject: [PATCH 4/4] ov5460 patch
+
+---
+ drivers/media/platform/mxc/capture/ov5640.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/mxc/capture/ov5640.c b/drivers/media/platform/mxc/capture/ov5640.c
+index ec8b809..549d34a 100644
+--- a/drivers/media/platform/mxc/capture/ov5640.c
++++ b/drivers/media/platform/mxc/capture/ov5640.c
+@@ -227,7 +227,7 @@ static struct reg_value ov5640_setting_30fps_VGA_640_480[] = {
+ };
+ 
+ static struct reg_value ov5640_setting_15fps_VGA_640_480[] = {
+-	{0x3c07, 0x08, 0, 0}, {0x3820, 0x41, 0, 0}, {0x3821, 0x07, 0, 0},
++	{0x3c07, 0x08, 0, 0}, {0x3820, 0x46, 0, 0}, {0x3821, 0x07, 0, 0},
+ 	{0x3814, 0x31, 0, 0}, {0x3815, 0x31, 0, 0}, {0x3800, 0x00, 0, 0},
+ 	{0x3801, 0x00, 0, 0}, {0x3802, 0x00, 0, 0}, {0x3803, 0x04, 0, 0},
+ 	{0x3804, 0x0a, 0, 0}, {0x3805, 0x3f, 0, 0}, {0x3806, 0x07, 0, 0},
+@@ -245,7 +245,7 @@ static struct reg_value ov5640_setting_15fps_VGA_640_480[] = {
+ };
+ 
+ static struct reg_value ov5640_setting_30fps_QVGA_320_240[] = {
+-	{0x3c07, 0x08, 0, 0}, {0x3820, 0x41, 0, 0}, {0x3821, 0x07, 0, 0},
++	{0x3c07, 0x08, 0, 0}, {0x3820, 0x46, 0, 0}, {0x3821, 0x07, 0, 0},
+ 	{0x3814, 0x31, 0, 0}, {0x3815, 0x31, 0, 0}, {0x3800, 0x00, 0, 0},
+ 	{0x3801, 0x00, 0, 0}, {0x3802, 0x00, 0, 0}, {0x3803, 0x04, 0, 0},
+ 	{0x3804, 0x0a, 0, 0}, {0x3805, 0x3f, 0, 0}, {0x3806, 0x07, 0, 0},
+@@ -263,7 +263,7 @@ static struct reg_value ov5640_setting_30fps_QVGA_320_240[] = {
+ };
+ 
+ static struct reg_value ov5640_setting_15fps_QVGA_320_240[] = {
+-	{0x3c07, 0x08, 0, 0}, {0x3820, 0x41, 0, 0}, {0x3821, 0x07, 0, 0},
++	{0x3c07, 0x08, 0, 0}, {0x3820, 0x46, 0, 0}, {0x3821, 0x07, 0, 0},
+ 	{0x3814, 0x31, 0, 0}, {0x3815, 0x31, 0, 0}, {0x3800, 0x00, 0, 0},
+ 	{0x3801, 0x00, 0, 0}, {0x3802, 0x00, 0, 0}, {0x3803, 0x04, 0, 0},
+ 	{0x3804, 0x0a, 0, 0}, {0x3805, 0x3f, 0, 0}, {0x3806, 0x07, 0, 0},
+-- 
+2.7.4
+

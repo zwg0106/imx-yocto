@@ -1,0 +1,25 @@
+From 609dd10c4e1e0da4e163c0ecbe00fdbc30792e65 Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Thu, 7 Nov 2019 15:36:03 +0800
+Subject: [PATCH 3/3] leds patch
+
+---
+ drivers/leds/leds-pwm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/leds/leds-pwm.c b/drivers/leds/leds-pwm.c
+index a9145aa..a4dd46d 100644
+--- a/drivers/leds/leds-pwm.c
++++ b/drivers/leds/leds-pwm.c
+@@ -97,7 +97,7 @@ static int led_pwm_add(struct device *dev, struct led_pwm_priv *priv,
+ 	led_data->active_low = led->active_low;
+ 	led_data->cdev.name = led->name;
+ 	led_data->cdev.default_trigger = led->default_trigger;
+-	led_data->cdev.brightness = LED_OFF;
++	led_data->cdev.brightness = LED_HALF;
+ 	led_data->cdev.max_brightness = led->max_brightness;
+ 	led_data->cdev.flags = LED_CORE_SUSPENDRESUME;
+ 
+-- 
+2.7.4
+

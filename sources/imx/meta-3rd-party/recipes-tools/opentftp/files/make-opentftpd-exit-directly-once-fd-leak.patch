@@ -1,0 +1,15 @@
+diff --git a/opentftpd.cpp b/opentftpd.cpp
+index b4312b6..146bbc8 100755
+--- a/opentftpd.cpp
++++ b/opentftpd.cpp
+@@ -508,7 +508,9 @@ void *processRequest(void *lpParam)
+ 			sendto(req.knock, (const char*)&req.serverError, strlen(req.serverError.errormessage) + 5, 0, (sockaddr*)&req.client, req.clientsize);
+ 			logMess(&req, 1);
+ 			req.attempt = UCHAR_MAX;
+-			continue;
++            // exit directly once socket fd can not be created
++            exit(-1);
++			// continue;
+ 		}
+ 
+ 		sockaddr_in service;

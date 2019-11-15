@@ -1,0 +1,96 @@
+From 727ba1d7edc6f059c0d01a77fab129b24a89f672 Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Thu, 7 Nov 2019 15:29:00 +0800
+Subject: [PATCH] imx6ull misc patch
+
+---
+ arch/arm/boot/dts/imx6ul-pinfunc.h |  2 +-
+ arch/arm/boot/dts/imx6ull.dtsi     | 24 ++++++++++++------------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6ul-pinfunc.h b/arch/arm/boot/dts/imx6ul-pinfunc.h
+index 9538b0e..4f9b610 100644
+--- a/arch/arm/boot/dts/imx6ul-pinfunc.h
++++ b/arch/arm/boot/dts/imx6ul-pinfunc.h
+@@ -291,7 +291,7 @@
+ #define MX6UL_PAD_UART5_TX_DATA__I2C2_SCL		0x00bc 0x0348 0x05ac 2 2
+ #define MX6UL_PAD_UART5_TX_DATA__CSI_DATA14		0x00bc 0x0348 0x04fc 3 0
+ #define MX6UL_PAD_UART5_TX_DATA__CSU_CSU_ALARM_AUT00	0x00bc 0x0348 0x0000 4 0
+-#define MX6UL_PAD_UART5_RX_DATA__UART5_DCE_RX		0x00c0 0x034c 0x0644 0 5
++#define MX6UL_PAD_UART5_RX_DATA__UART5_DCE_RX		0x00c0 0x034c 0x0644 0 7 
+ #define MX6UL_PAD_UART5_RX_DATA__UART5_DTE_TX		0x00c0 0x034c 0x0000 0 0
+ #define MX6UL_PAD_UART5_RX_DATA__ENET2_COL		0x00c0 0x034c 0x0000 1 0
+ #define MX6UL_PAD_UART5_RX_DATA__I2C2_SDA		0x00c0 0x034c 0x05b0 2 2
+diff --git a/arch/arm/boot/dts/imx6ull.dtsi b/arch/arm/boot/dts/imx6ull.dtsi
+index 54ee304..074912f 100644
+--- a/arch/arm/boot/dts/imx6ull.dtsi
++++ b/arch/arm/boot/dts/imx6ull.dtsi
+@@ -452,8 +452,8 @@
+ 				compatible = "fsl,imx6ul-pwm", "fsl,imx27-pwm";
+ 				reg = <0x02084000 0x4000>;
+ 				interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clks IMX6UL_CLK_DUMMY>,
+-					 <&clks IMX6UL_CLK_DUMMY>;
++				clocks = <&clks IMX6UL_CLK_PWM2>,
++					 <&clks IMX6UL_CLK_PWM2>;
+ 				clock-names = "ipg", "per";
+ 				#pwm-cells = <2>;
+ 			};
+@@ -472,8 +472,8 @@
+ 				compatible = "fsl,imx6ul-pwm", "fsl,imx27-pwm";
+ 				reg = <0x0208c000 0x4000>;
+ 				interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clks IMX6UL_CLK_DUMMY>,
+-					 <&clks IMX6UL_CLK_DUMMY>;
++				clocks = <&clks IMX6UL_CLK_PWM4>,
++					 <&clks IMX6UL_CLK_PWM4>;
+ 				clock-names = "ipg", "per";
+ 				#pwm-cells = <2>;
+ 			};
+@@ -803,8 +803,8 @@
+ 				compatible = "fsl,imx6ul-pwm", "fsl,imx27-pwm";
+ 				reg = <0x020f0000 0x4000>;
+ 				interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clks IMX6UL_CLK_DUMMY>,
+-					 <&clks IMX6UL_CLK_DUMMY>;
++				clocks = <&clks IMX6UL_CLK_PWM5>,
++					 <&clks IMX6UL_CLK_PWM5>;
+ 				clock-names = "ipg", "per";
+ 				#pwm-cells = <2>;
+ 			};
+@@ -813,8 +813,8 @@
+ 				compatible = "fsl,imx6ul-pwm", "fsl,imx27-pwm";
+ 				reg = <0x020f4000 0x4000>;
+ 				interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clks IMX6UL_CLK_DUMMY>,
+-					 <&clks IMX6UL_CLK_DUMMY>;
++				clocks = <&clks IMX6UL_CLK_PWM6>,
++					 <&clks IMX6UL_CLK_PWM6>;
+ 				clock-names = "ipg", "per";
+ 				#pwm-cells = <2>;
+ 			};
+@@ -823,8 +823,8 @@
+ 				compatible = "fsl,imx6ul-pwm", "fsl,imx27-pwm";
+ 				reg = <0x020f8000 0x4000>;
+ 				interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clks IMX6UL_CLK_DUMMY>,
+-					 <&clks IMX6UL_CLK_DUMMY>;
++				clocks = <&clks IMX6UL_CLK_PWM7>,
++					 <&clks IMX6UL_CLK_PWM7>;
+ 				clock-names = "ipg", "per";
+ 				#pwm-cells = <2>;
+ 			};
+@@ -833,8 +833,8 @@
+ 				compatible = "fsl,imx6ul-pwm", "fsl,imx27-pwm";
+ 				reg = <0x020fc000 0x4000>;
+ 				interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clks IMX6UL_CLK_DUMMY>,
+-					 <&clks IMX6UL_CLK_DUMMY>;
++				clocks = <&clks IMX6UL_CLK_PWM8>,
++					 <&clks IMX6UL_CLK_PWM8>;
+ 				clock-names = "ipg", "per";
+ 				#pwm-cells = <2>;
+ 			};
+-- 
+2.7.4
+

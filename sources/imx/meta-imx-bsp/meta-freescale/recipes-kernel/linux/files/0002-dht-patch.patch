@@ -1,0 +1,46 @@
+From aff3d7712a69ad982566d7b50186ede60bf159a0 Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Thu, 7 Nov 2019 15:33:53 +0800
+Subject: [PATCH 2/2] dht patch
+
+---
+ drivers/iio/humidity/dht11.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/humidity/dht11.c b/drivers/iio/humidity/dht11.c
+index 2a22ad9..68dc46a 100644
+--- a/drivers/iio/humidity/dht11.c
++++ b/drivers/iio/humidity/dht11.c
+@@ -41,7 +41,7 @@
+ 
+ #define DHT11_DATA_VALID_TIME	2000000000  /* 2s in ns */
+ 
+-#define DHT11_EDGES_PREAMBLE 2
++#define DHT11_EDGES_PREAMBLE 1 
+ #define DHT11_BITS_PER_READ 40
+ /*
+  * Note that when reading the sensor actually 84 edges are detected, but
+@@ -159,6 +159,7 @@ static int dht11_decode(struct dht11 *dht11, int offset)
+ 	}
+ 
+ 	dht11->timestamp = ktime_get_boot_ns();
++#if 0
+ 	if (hum_int < 20) {  /* DHT22 */
+ 		dht11->temperature = (((temp_int & 0x7f) << 8) + temp_dec) *
+ 					((temp_int & 0x80) ? -100 : 100);
+@@ -172,6 +173,12 @@ static int dht11_decode(struct dht11 *dht11, int offset)
+ 			hum_int, hum_dec, temp_int, temp_dec);
+ 		return -EIO;
+ 	}
++#endif
++    dht11->temperature = temp_int;
++    dht11->humidity = hum_int;
++	dev_err(dht11->dev,
++		"DHT11: %d %d %d %d\n",
++		hum_int, hum_dec, temp_int, temp_dec);
+ 
+ 	return 0;
+ }
+-- 
+2.7.4
+

@@ -1,0 +1,53 @@
+From a74ba9a7b80316bdae7986432c6267543cfea192 Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Tue, 5 Nov 2019 18:21:34 +0800
+Subject: [PATCH 2/2] add hwasin supporting
+
+---
+ arch/arm/cpu/armv7/mx6/Kconfig | 8 ++++++++
+ arch/arm/dts/Makefile          | 3 +++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/arch/arm/cpu/armv7/mx6/Kconfig b/arch/arm/cpu/armv7/mx6/Kconfig
+index be9f2b9..00f2b58 100644
+--- a/arch/arm/cpu/armv7/mx6/Kconfig
++++ b/arch/arm/cpu/armv7/mx6/Kconfig
+@@ -337,6 +337,13 @@ config TARGET_MX6ULL_14X14_EVK
+ 	select DM
+ 	select DM_THERMAL
+ 
++config TARGET_HWASIN
++	bool "Support hwasin"
++	select BOARD_LATE_INIT
++	select MX6ULL
++	select DM
++	select DM_THERMAL
++
+ config TARGET_MX6ULL_9X9_EVK
+ 	bool "Support mx6ull_9x9_evk"
+ 	select BOARD_LATE_INIT
+@@ -505,6 +512,7 @@ source "board/freescale/mx6ul_14x14_evk/Kconfig"
+ source "board/freescale/mx6ul_14x14_ddr3_arm2/Kconfig"
+ source "board/freescale/mx6ul_14x14_lpddr2_arm2/Kconfig"
+ source "board/freescale/mx6ullevk/Kconfig"
++source "board/freescale/hwasin/Kconfig"
+ source "board/freescale/mx6ull_ddr3_arm2/Kconfig"
+ source "board/grinn/liteboard/Kconfig"
+ source "board/phytec/pcm058/Kconfig"
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index afd1a5b..dbed123 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -316,6 +316,9 @@ dtb-$(CONFIG_MX6) += imx6ul-14x14-ddr3-arm2.dtb \
+ 	imx6ul-14x14-evk.dtb \
+ 	imx6ul-14x14-evk-emmc.dtb \
+ 	imx6ul-14x14-evk-gpmi-weim.dtb \
++	hwasin.dtb \
++	hwasin-emmc.dtb \
++	hwasin-gpmi-weim.dtb \
+ 	imx6ull-14x14-ddr3-arm2.dtb \
+ 	imx6ull-14x14-ddr3-arm2-epdc.dtb \
+ 	imx6ull-14x14-ddr3-arm2-emmc.dtb \
+-- 
+2.7.4
+

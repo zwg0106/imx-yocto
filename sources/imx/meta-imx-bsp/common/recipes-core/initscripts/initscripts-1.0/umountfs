@@ -1,0 +1,34 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          umountfs
+# Required-Start:
+# Required-Stop:     
+# Default-Start:
+# Default-Stop:      0 6
+# Short-Description: Turn off swap and unmount all local file systems.
+# Description:
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+echo "Deactivating swap..."
+swapoff -a
+
+# We leave /proc mounted.
+echo "Unmounting local filesystems..."
+grep -q /mnt/ram /proc/mounts && mount -o remount,ro /mnt/ram
+mount -no remount,ro /
+
+# unmount aufs 
+umount -f $(grep 'aufs' /proc/mounts | awk '{print$2}' | sort -r)
+
+umount -f -a -r 
+
+sync; sync
+
+# if this is an SSD, make it idle to flush its cache
+if [ -e /dev/sda ]; then
+    hdparm -y /dev/sda
+fi
+
+: exit 0

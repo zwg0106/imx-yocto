@@ -1,0 +1,59 @@
+From 08e3ad8b91817265b450909004f8a8f46a9504c2 Mon Sep 17 00:00:00 2001
+From: calix <alex.zhu@calix.com>
+Date: Thu, 7 Nov 2019 15:43:24 +0800
+Subject: [PATCH 7/7] mmc patch
+
+---
+ drivers/mmc/core/core.c | 6 +++---
+ drivers/mmc/core/host.c | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+index d2eb755..3014740 100644
+--- a/drivers/mmc/core/core.c
++++ b/drivers/mmc/core/core.c
+@@ -186,8 +186,8 @@ void mmc_request_done(struct mmc_host *host, struct mmc_request *mrq)
+ 	if (!err || !cmd->retries || mmc_card_removed(host->card)) {
+ 		mmc_should_fail_request(host, mrq);
+ 
+-		if (!host->ongoing_mrq)
+-			led_trigger_event(host->led, LED_OFF);
++		//if (!host->ongoing_mrq)
++		//	led_trigger_event(host->led, LED_OFF);
+ 
+ 		if (mrq->sbc) {
+ 			pr_debug("%s: req done <CMD%u>: %d: %08x %08x %08x %08x\n",
+@@ -365,7 +365,7 @@ static int mmc_start_request(struct mmc_host *host, struct mmc_request *mrq)
+ 	if (err)
+ 		return err;
+ 
+-	led_trigger_event(host->led, LED_FULL);
++	//led_trigger_event(host->led, LED_FULL);
+ 	__mmc_start_request(host, mrq);
+ 
+ 	return 0;
+diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+index aa4afba..d8778c3 100644
+--- a/drivers/mmc/core/host.c
++++ b/drivers/mmc/core/host.c
+@@ -432,7 +432,7 @@ int mmc_add_host(struct mmc_host *host)
+ 	if (err)
+ 		return err;
+ 
+-	led_trigger_register_simple(dev_name(&host->class_dev), &host->led);
++	//led_trigger_register_simple(dev_name(&host->class_dev), &host->led);
+ 
+ #ifdef CONFIG_DEBUG_FS
+ 	mmc_add_host_debugfs(host);
+@@ -467,7 +467,7 @@ void mmc_remove_host(struct mmc_host *host)
+ 
+ 	device_del(&host->class_dev);
+ 
+-	led_trigger_unregister_simple(host->led);
++	//led_trigger_unregister_simple(host->led);
+ }
+ 
+ EXPORT_SYMBOL(mmc_remove_host);
+-- 
+2.7.4
+
