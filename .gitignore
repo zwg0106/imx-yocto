@@ -1,7 +1,5 @@
-.idea/
 *.pyc
-# Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
-*$py.class
 poky/
+sources/meta-freescale
+sources/meta-openembedded
