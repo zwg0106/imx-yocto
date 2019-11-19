@@ -1,3 +1,6 @@
 *.pyc
 __pycache__/
+sources/meta-freescale/
+sources/meta-openembedded/
+sources/poky/
 srcBuild/
