@@ -1,5 +1,5 @@
 SUMMARY = "imx"
-DESCRIPTION = "image micro packagegroup"
+DESCRIPTION = "image ramdisk packagegroup"
 
 ALLOW_EMPTY_${PN} = "1"
 PR = "r1"
@@ -7,17 +7,17 @@ PR = "r1"
 inherit packagegroup
 
 PROVIDES = "${PACKAGES}"
-PACKAGES = "packagegroup-micro-base   \
-    ${@bb.utils.contains('MACHINE_ARCH', 'hwasin', 'packagegroup-micro-hwasin', '',d)} \
+PACKAGES = "packagegroup-ramdisk-base   \
+    ${@bb.utils.contains('MACHINE_ARCH', 'hwasin', 'packagegroup-ramdisk-hwasin', '',d)} \
     "
 
-RDEPENDS_packagegroup-micro-base = "\
-    ${@bb.utils.contains('MACHINE_ARCH', 'hwasin', 'packagegroup-micro-hwasin', '',d)} \
+RDEPENDS_packagegroup-ramdisk-base = "\
+    ${@bb.utils.contains('MACHINE_ARCH', 'hwasin', 'packagegroup-ramdisk-hwasin', '',d)} \
     "
 
-SUMMARY_packagegroup-micro-hwasin = "hwasin specific"
-DESCRIPTION_packagegroup-micro-hwasin = "Packages required on the hwasin platform"
-RDEPENDS_packagegroup-micro-hwasin = "\
+SUMMARY_packagegroup-ramdisk-hwasin = "hwasin specific"
+DESCRIPTION_packagegroup-ramdisk-hwasin = "Packages required on the hwasin platform"
+RDEPENDS_packagegroup-ramdisk-hwasin = "\
     bash                    \
     file                    \
     findutils               \
@@ -32,5 +32,6 @@ RDEPENDS_packagegroup-micro-hwasin = "\
     net-tools               \
     start-stop-daemon       \
     procps                  \
+    init-ifupdown           \
     python3-core            \
     "

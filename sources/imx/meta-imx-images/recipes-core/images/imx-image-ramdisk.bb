@@ -10,7 +10,7 @@ IMAGE_FSTYPES = "${INITRAMFS_FSTYPES}"
 INITRAMFS_MAXSIZE = "300000"
 
 # manufacturing stuff
-IMAGE_INSTALL += "packagegroup-micro-base"
+IMAGE_INSTALL += "packagegroup-ramdisk-base"
 
 IMAGE_INSTALL += "kernel-modules"
 

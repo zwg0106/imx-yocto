@@ -1,0 +1,15 @@
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+ 
+# The loopback interface
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet manual
+    up ip link set dev $IFACE up
+    down ip link set dev $IFACE down
+
+auto eth1
+iface eth1 inet manual
+    up ip link set dev $IFACE up
+    down ip link set dev $IFACE down
