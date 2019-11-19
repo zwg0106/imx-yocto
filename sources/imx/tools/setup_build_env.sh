@@ -83,7 +83,7 @@ function envReInit()
         return 1
     fi
 
-    source ${init_conf}
+    source ./${init_conf}
 
     mv ${yoctoBuildDir}/conf/bblayers.conf ${yoctoBuildDir}/conf/bblayers.conf.bak
     export TEMPLATECONF="${imxMetadataDir}/meta-app/conf"
