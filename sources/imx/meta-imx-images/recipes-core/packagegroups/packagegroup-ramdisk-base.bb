@@ -20,6 +20,7 @@ DESCRIPTION_packagegroup-ramdisk-hwasin = "Packages required on the hwasin platf
 RDEPENDS_packagegroup-ramdisk-hwasin = "\
     bash                    \
     file                    \
+    coreutils               \
     findutils               \
     tar                     \
     vim-tiny                \
