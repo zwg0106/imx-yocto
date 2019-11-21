@@ -24,11 +24,11 @@
 #
 # 
 #
-d root root 0755 /FLASH/persist                        none
-d root root 0755 /FLASH/persist/etc/ssl                none
-d root root 0755 /FLASH/persist/etc/ssh                none
-d root root 0755 /FLASH/persist/etc/udev               none
-d root root 0755 /FLASH/persist/inithacks              none
-l root root 0755 /etc/config                           /FLASH/persist/bp_current/etc/config
-l root root 0755 /etc/ssl                              /FLASH/persist/etc/ssl
-l root root 0755 /etc/ssh                              /FLASH/persist/etc/ssh
+d root root 0755 /APP/persist                        none
+d root root 0755 /APP/persist/etc/ssl                none
+d root root 0755 /APP/persist/etc/ssh                none
+d root root 0755 /APP/persist/etc/udev               none
+d root root 0755 /APP/persist/inithacks              none
+l root root 0755 /etc/config                           /APP/persist/etc/config
+l root root 0755 /etc/ssl                              /APP/persist/etc/ssl
+l root root 0755 /etc/ssh                              /APP/persist/etc/ssh
