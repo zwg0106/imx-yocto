@@ -135,7 +135,7 @@
 	"fdt_file=hwasin-emmc.dtb\0" \
 	"fdt_addr=0x83000000\0" \
 	"ramdisk_addr=0x83800000\0" \
-	"ramdisk_size=5000000\0" \
+	"ramdisk_size=2000000\0" \
 	"ramdiskfile=rootfs.ext2.gz.uboot\0" \
 	"tee_addr=0x84000000\0" \
 	"tee_file=uTee-6ullevk\0" \

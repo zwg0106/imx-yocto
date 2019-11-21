@@ -1,0 +1,125 @@
+#!/bin/sh
+
+mnt_enabled() {
+
+    return 0
+}
+
+INITLOG=/initramfs.log
+USB_PLUGGED=/usb.plugged
+
+mnt_run() {
+
+    # Prep two or more layers for overlayfs:
+    # Bottom: read-only squashfs
+    # Middle: read-only stack of PFSxx dirs (if exists)
+    # Top: read-write tmpfs
+    mkdir -p /ro
+    if [ $? != 0 ]; then
+        fatal "ERROR: mkdir /ro failed"
+    fi
+    mkdir -p /rw
+    if [ $? != 0 ]; then
+        fatal "ERROR: mkdir /rw failed"
+    fi
+
+    imgdir=${bootparam_imgmnt}/${bootparam_imgdir}
+
+    # Mount the filesystem image as read-only:
+    mount -o loop,ro ${imgdir}/${bootparam_img} /ro
+    if [ $? != 0 ]; then
+        fatal "ERROR: mount -o loop,ro failed"
+    fi
+
+    # Create a read-write partition:
+    mount -t tmpfs -o size=64m tmpfs /rw
+    if [ $? != 0 ]; then
+        fatal "ERROR: mount -t tmpfs failed"
+    fi
+
+    # Create a stacked multilayer overlayfs based on Patch directories (lowest number is at the bottom):
+    cd ${imgdir}
+    let numpfs=0
+    for dir in `ls -d PFS/?? 2> /dev/null | sort -r`; do
+        chmod go+rx $dir
+        eval pfsdirs$numpfs=$dir
+        let numpfs+=1
+    done
+
+    if [ ${numpfs} != 0 ]; then
+        let i=0
+        while [ $i -lt $numpfs ]; do
+            # Skip over INVALID PFS dirs:
+            pfsdir=$(eval echo \${pfsdirs${i}})
+            if [ ! -e $pfsdir/INVALID ]; then
+                pfslayers=${pfslayers}${imgdir}/${pfsdir}
+            fi
+            let i+=1
+        done
+        echo "pfslayers ==> ${pfslayers}"
+    fi
+        
+    # Combine the three (/ro + PFSxx + /rw) in overlay.
+    # Note that PFSxx may be empty if there are no patches present.
+    mkdir -p /work
+    mount -t overlay overlay -o "lowerdir=/ro:${pfslayers},upperdir=/rw,workdir=/work" $ROOTFS_DIR
+    if [ $? != 0 ]; then
+        fatal "ERROR: mount -t aufs failed"
+    fi
+
+    # Move the /ro and /rw partitions
+    mkdir -p $ROOTFS_DIR/mnt/ro
+    mkdir -p $ROOTFS_DIR/mnt/rw
+    mount --move /ro $ROOTFS_DIR/mnt/ro
+    if [ $? != 0 ]; then
+        fatal "ERROR: mount --move /ro failed"
+    fi
+    mount --move /rw $ROOTFS_DIR/mnt/rw
+    if [ $? != 0 ]; then
+        fatal "ERROR: mount --move /rw failed"
+    fi
+
+    # Check to see if actually mounted, dir could exist but not mounted,
+    # causing mount to fail, fatal resets card :(
+    mounted=`grep "/media/sda1" /etc/mtab`
+    if [ -d "/media/sda1" ] && [ -n "${mounted}" ]; then
+        mkdir -p $ROOTFS_DIR/media/sda1
+        mount --move /media/sda1 $ROOTFS_DIR/media/sda1
+        if [ $? != 0 ]; then
+            fatal "ERROR: mount --move /media/sda1 failed"
+        fi
+    fi
+
+    mounted=`grep "/media/sda2" /etc/mtab`
+    if [ -d "/media/sda2" ] && [ -n "${mounted}" ]; then
+        mkdir -p $ROOTFS_DIR/media/sda2
+        mount --move /media/sda2 $ROOTFS_DIR/media/sda2
+        if [ $? != 0 ]; then
+            fatal "ERROR: mount --move /media/sda2 failed"
+        fi
+    fi
+
+    # create links for BOOT and APP 
+    cd  ${ROOTFS_DIR}
+    if [ $? != 0 ]; then
+        fatal "ERROR: cd ${ROOTFS_DIR} failed"
+    fi
+    if [ "${bootparam_imgmnt}" == "/media/sda2" ]; then
+        ln -sf ./media/sda2 APP 
+        if [ $? != 0 ]; then
+            fatal "ERROR: ln /media/sda2 failed"
+        fi
+        ln -sf ./media/sda1 BOOT
+        if [ $? != 0 ]; then
+            fatal "ERROR: ln /media/sda1 failed"
+        fi
+    else
+        echo "Unknown imgmnt : ${bootparam_imgmnt}"
+    fi
+
+    if [ -e $INITLOG ]; then
+        mv $INITLOG ${ROOTFS_DIR}/tmp/
+    fi
+    
+    cd /
+}

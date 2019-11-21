@@ -1,0 +1,44 @@
+#!/bin/sh
+
+resume_enabled() {
+    RESUMEDEV=""
+    #msg 'Getting the resume partition from kernel commandline options..'
+    for x in `cat /proc/cmdline`
+        do
+           case ${x} in
+                resume=*) RESUMEDEV=${x#resume=} ;;
+                *) continue ;;
+           esac
+        done
+    if [ "$RESMEDEV" = "" ];then 
+        debug "resume= kernel parameter doesn't exist"
+        return 1
+    fi
+
+    # Getting "dm-0" (the file the resumeparition links to, for me this is /dev/dm-0, and then stripping it of /dev/)
+    RESUMEDEV=$(readlink -f ${RESUMEDEV} | awk -F '/' '{ print $3 }')
+    #msg 'Getting Major/Minor number of resume device'
+    RESMAJMIN=$(cat /sys/class/block/${RESUMEDEV}/dev)
+
+    export RESUMEDEV
+    export RESMAJMIN
+
+    if [ "$RESUMEDEV" = "" ]; then
+        debug "resume= kernel parameter doesn't exist"
+        return 1
+    fi
+
+    return 0
+}
+
+resume_run() {
+
+	# Try to resume
+    if [ "$RESMAJMIN" != "" ]; then
+	debug "Trying resume from $RESMAJMIN"
+	dmesg -n 7
+	echo $RESMAJMIN > /sys/power/resume
+	dmesg -n 4
+    fi
+}
+

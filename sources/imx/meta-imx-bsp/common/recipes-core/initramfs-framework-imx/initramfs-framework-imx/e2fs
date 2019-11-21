@@ -1,0 +1,29 @@
+#!/bin/sh
+# Copyright (C) 2011 O.S. Systems Software LTDA.
+# Licensed on MIT
+
+e2fs_enabled() {
+    return 0
+}
+
+e2fs_run() {
+    filesystems="ext4 ext3 ext2"
+
+    for fs in $filesystems; do
+        eval "fs_options=\$bootparam_${fs}"
+        if [ -n "$fs_options" ]; then
+            dev=`expr "$fs_options" : '\([^:]*\).*'`
+            path=`expr "$fs_options" : '[^:]*:\([^:]*\).*'`
+
+            info "Mounting $dev as $fs on $path as $fs..."
+            mkdir -p $path
+            if [ $? != 0 ]; then
+                fatal "ERROR: mkdir $path failed"
+            fi
+            mount -t $fs $dev $path
+            if [ $? != 0 ]; then
+                fatal "ERROR: mount -t $fs $dev $path failed"
+            fi
+        fi
+    done
+}
