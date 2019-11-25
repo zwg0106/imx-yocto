@@ -62,6 +62,15 @@ function updatePokyLocalConf()
     else
         sed -i "s|^SOURCE_MIRROR_URL.*|SOURCE_MIRROR_URL ?= \"${SOURCE_MIRROR_URL}\"|" ${localConfFile}
     fi
+    
+    local tmp=$(cat ${localConfFile} | grep "srcDir")
+    if [ -z "${tmp}" ]; then
+        cp ${localConfFile} ${localConfFile}.tmp
+        printf "\nsrcDir = \"%s\" \n" $srcDir >> ${localConfFile}.tmp
+        mv ${localConfFile}.tmp ${localConfFile}
+    else
+        sed -i "s|^srcDir.*|srcDir = \"${srcDir}\"|" ${localConfFile}
+    fi
 }
 
 function envReInit()
@@ -169,6 +178,7 @@ function setupPokyConfLocalExtra()
     printf "\nSANITY_TESTED_DISTROS_append = \" Ubuntu \" \n" >> ${localConfFile}.tmp
     printf "\nSOURCE_MIRROR_URL ?= \"%s\" \n" "${SOURCE_MIRROR_URL}" >> ${localConfFile}.tmp
     printf "\ntoolsDir = \"%s\" \n" "${toolsDir}" >> ${localConfFile}.tmp
+    printf "\nsrcDir = \"%s\" \n" "${srcDir}" >> ${localConfFile}.tmp
 
     mv ${localConfFile}.tmp ${localConfFile}
     

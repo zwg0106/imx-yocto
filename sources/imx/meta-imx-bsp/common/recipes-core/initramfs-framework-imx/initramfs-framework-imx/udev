@@ -80,9 +80,9 @@ udev_run() {
 
     # /dev/sda doesn't appear right away:
     let cnt=1
-    while [ ! -e /dev/sda ] && [ ! -e /dev/mmcblk0 ]; do
+    while [ ! -e /dev/sda ] && [ ! -e /dev/mmcblk1 ]; do
         if [ $cnt -gt $MAX_WAIT ]; then
-            echo "udev: Waited for $MAX_WAIT seconds for /dev/sda or /dev/mmcblk0 to appear. Giving up!!"
+            echo "udev: Waited for $MAX_WAIT seconds for /dev/sda or /dev/mmcblk1 to appear. Giving up!!"
             echo "udev: Cannot e2fsck APP and BOOT partitions without it"
             echo "udev: This unit will probably crash in a few seconds, unless fail2shell is set"
             if [ $fail2shell ]; then
@@ -91,7 +91,7 @@ udev_run() {
             fi
             break
         fi
-        echo "udev: Waiting for /dev/sda or for /dev/mmcblk0 ..." >> $INITLOG
+        echo "udev: Waiting for /dev/sda or for /dev/mmcblk1 ..." >> $INITLOG
         sleep 1
         let cnt+=1
     done
@@ -101,9 +101,9 @@ udev_run() {
         fs_check /dev/sda2
     fi
 
-    if [ -e /dev/mmcblk0 ]; then
-        fs_check /dev/mmcblk0p1
-        fs_check /dev/mmcblk0p2
+    if [ -e /dev/mmcblk1 ]; then
+        fs_check /dev/mmcblk1p1
+        fs_check /dev/mmcblk1p2
         # create the mount points for fstab
         if [ ! -d /media/sda1 ]; then
             mkdir -p /media/sda1

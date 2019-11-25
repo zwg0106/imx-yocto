@@ -5,3 +5,5 @@ sources/meta-freescale/
 sources/meta-openembedded/
 sources/poky/
 srcBuild/
+oe-logs
+oe-workdir

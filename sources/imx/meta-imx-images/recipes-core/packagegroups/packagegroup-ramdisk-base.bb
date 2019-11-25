@@ -34,5 +34,18 @@ RDEPENDS_packagegroup-ramdisk-hwasin = "\
     start-stop-daemon       \
     procps                  \
     init-ifupdown           \
+    e2fsprogs               \
+    e2fsprogs-e2fsck        \
+    e2fsprogs-tune2fs       \
+    e2fsprogs-mke2fs        \
     python3-core            \
+    python3-xml             \
+    python3-logging         \
+    python3-io              \
+    python3-misc            \
+    python3-json            \
+    python3-multiprocessing \
+    python3-shell           \
+    python3-threading       \
+    python3-pexpect         \
     "

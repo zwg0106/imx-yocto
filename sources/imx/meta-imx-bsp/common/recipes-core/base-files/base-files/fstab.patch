@@ -6,10 +6,10 @@
  tmpfs                /run                 tmpfs      mode=0755,nodev,nosuid,strictatime 0  0
 -tmpfs                /var/volatile        tmpfs      defaults              0  0
 +tmpfs                /var/volatile        tmpfs      size=100M             0  0
-+tmpfs                /var/core            tmpfs      size=100M             0  0
++tmpfs                /var/core            tmpfs      size=20M              0  0
  
  # uncomment this if your device has a SD/MMC/Transflash slot
  #/dev/mmcblk0p1       /media/card          auto       defaults,sync,noauto  0  0
  
-+/dev/mmcblk0p1  /media/sda1     ext4    rw,relatime,errors=continue,user_xattr,barrier=1,data=writeback 0 2
-+/dev/mmcblk0p2  /media/sda2     ext4    rw,relatime,data=ordered 0 2
++/dev/mmcblk1p1  /media/sda1     ext4    rw,relatime,errors=continue,user_xattr,barrier=1,data=writeback 0 2
++/dev/mmcblk1p2  /media/sda2     ext4    rw,relatime,data=ordered 0 2
