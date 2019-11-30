@@ -211,9 +211,7 @@ BB_DISKMON_DIRS = "\
     ABORT,/tmp,10M,1K"
 
 # remove old images
-# disabled 8/5/16 deletes a file while still needed breaks denali build.
-#  failed target imx-image-initramfs-hwasin-20190726133048.rootfs.cpio.gz.u-boot
-# RM_OLD_IMAGE = "1"
+RM_OLD_IMAGE = "1"
 
 #
 # Shared-state files from other locations

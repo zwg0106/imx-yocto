@@ -1,23 +1,16 @@
-SUMMARY = "imx"
-DESCRIPTION = "image ramdisk packagegroup"
+DESCRIPTION = "3rdparty packagegroup"
 
 ALLOW_EMPTY_${PN} = "1"
 PR = "r1"
 
+PROVIDES = "${PACKAGES}"
+PACKAGES = "\
+        packagegroup-3rdparty \
+        "
+
 inherit packagegroup
 
-PROVIDES = "${PACKAGES}"
-PACKAGES = "packagegroup-ramdisk-base   \
-    ${@bb.utils.contains('MACHINE_ARCH', 'hwasin', 'packagegroup-ramdisk-hwasin', '',d)} \
-    "
-
-RDEPENDS_packagegroup-ramdisk-base = "\
-    ${@bb.utils.contains('MACHINE_ARCH', 'hwasin', 'packagegroup-ramdisk-hwasin', '',d)} \
-    "
-
-SUMMARY_packagegroup-ramdisk-hwasin = "hwasin specific"
-DESCRIPTION_packagegroup-ramdisk-hwasin = "Packages required on the hwasin platform"
-RDEPENDS_packagegroup-ramdisk-hwasin = "\
+RDEPENDS_packagegroup-3rdparty = "\
     bash                    \
     file                    \
     coreutils               \
@@ -38,5 +31,22 @@ RDEPENDS_packagegroup-ramdisk-hwasin = "\
     e2fsprogs-e2fsck        \
     e2fsprogs-tune2fs       \
     e2fsprogs-mke2fs        \
-    pkg-install             \
-    "
+	hostapd					\
+	rfkill					\
+	dhcp-client				\
+	dhcp-server				\
+	libuio					\
+	libuio-tools			\
+	memtester				\
+	mtd-utils				\
+	usbutils				\
+	curl					\
+	ethtool					\
+	rsync					\
+	tcpdump					\
+	cronie					\
+	daemonize				\
+	expect					\
+	lsof					\
+	makeself				\
+        "

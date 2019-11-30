@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+DEPENDS += "imx-image-initramfs"
+
 COMPATIBLE_MACHINE_hwasin = "hwasin"
 
 SRC_URI_append = " \

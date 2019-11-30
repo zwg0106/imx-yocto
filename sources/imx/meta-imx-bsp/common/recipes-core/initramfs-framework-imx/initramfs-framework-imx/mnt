@@ -23,7 +23,7 @@ mnt_run() {
         fatal "ERROR: mkdir /rw failed"
     fi
 
-    imgdir=${bootparam_imgmnt}/${bootparam_imgdir}
+    imgdir=${bootparam_imgdev}/${bootparam_imgdir}
 
     # Mount the filesystem image as read-only:
     mount -o loop,ro ${imgdir}/${bootparam_img} /ro
@@ -104,7 +104,7 @@ mnt_run() {
     if [ $? != 0 ]; then
         fatal "ERROR: cd ${ROOTFS_DIR} failed"
     fi
-    if [ "${bootparam_imgmnt}" == "/media/sda2" ]; then
+    if [ "${bootparam_imgdev}" == "/media/sda2" ]; then
         ln -sf ./media/sda2 APP 
         if [ $? != 0 ]; then
             fatal "ERROR: ln /media/sda2 failed"
@@ -114,7 +114,7 @@ mnt_run() {
             fatal "ERROR: ln /media/sda1 failed"
         fi
     else
-        echo "Unknown imgmnt : ${bootparam_imgmnt}"
+        echo "Unknown imgdev : ${bootparam_imgdev}"
     fi
 
     if [ -e $INITLOG ]; then
