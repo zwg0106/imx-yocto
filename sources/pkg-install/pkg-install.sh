@@ -274,8 +274,8 @@ function setNextBootPartition()
 	olddir=${PWD}
 
 	mecho "Creating boot partition links..."
-	cd ${mdeia}1
-	ln -sf ${part} boot.img
+	cd ${media}1
+	ln -sf ${part} boot.imgdir
 	
 	sync;sync
 	

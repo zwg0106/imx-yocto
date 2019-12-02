@@ -7,12 +7,15 @@ mnt_enabled() {
 
 INITLOG=/initramfs.log
 USB_PLUGGED=/usb.plugged
+BOOT_DEV=/media/sda1
+APP_DEV=/media/sda2
+IMG=image.rootfs
 
 mnt_run() {
 
     # Prep two or more layers for overlayfs:
     # Bottom: read-only squashfs
-    # Middle: read-only stack of PFSxx dirs (if exists)
+    # Middle: read-only stack of PATCHES/xx dirs (if exists)
     # Top: read-write tmpfs
     mkdir -p /ro
     if [ $? != 0 ]; then
@@ -23,10 +26,11 @@ mnt_run() {
         fatal "ERROR: mkdir /rw failed"
     fi
 
-    imgdir=${bootparam_imgdev}/${bootparam_imgdir}
+    bootparam_imgdir=$(basename $(readlink -f ${BOOT_DEV}/${bootparam_imgdir}))
+    imgdir=${APP_DEV}/${bootparam_imgdir}
 
     # Mount the filesystem image as read-only:
-    mount -o loop,ro ${imgdir}/${bootparam_img} /ro
+    mount -o loop,ro ${imgdir}/${IMG} /ro
     if [ $? != 0 ]; then
         fatal "ERROR: mount -o loop,ro failed"
     fi
@@ -39,32 +43,37 @@ mnt_run() {
 
     # Create a stacked multilayer overlayfs based on Patch directories (lowest number is at the bottom):
     cd ${imgdir}
-    let numpfs=0
-    for dir in `ls -d PFS/?? 2> /dev/null | sort -r`; do
+    let numpatches=0
+    for dir in `ls -d PATCHES/?? 2> /dev/null | sort -r`; do
         chmod go+rx $dir
-        eval pfsdirs$numpfs=$dir
-        let numpfs+=1
+        eval patch_dirs$numpatches=$dir
+        let numpatches+=1
     done
 
-    if [ ${numpfs} != 0 ]; then
+    if [ ${numpatches} != 0 ]; then
         let i=0
-        while [ $i -lt $numpfs ]; do
-            # Skip over INVALID PFS dirs:
-            pfsdir=$(eval echo \${pfsdirs${i}})
-            if [ ! -e $pfsdir/INVALID ]; then
-                pfslayers=${pfslayers}${imgdir}/${pfsdir}
+        while [ $i -lt $numpatches ]; do
+            # Skip over INVALID PATCH dirs:
+            patch_dir=$(eval echo \${patch_dirs${i}})
+            if [ ! -e $patch_dir/INVALID ]; then
+                patch_layers=${patch_layers}${imgdir}/${patch_dir}
             fi
             let i+=1
         done
-        echo "pfslayers ==> ${pfslayers}"
+        echo "patch_layers ==> ${patch_layers}"
     fi
         
-    # Combine the three (/ro + PFSxx + /rw) in overlay.
+    # Combine the three (/ro + PATCHES/xx + /rw) in overlay.
     # Note that PFSxx may be empty if there are no patches present.
-    mkdir -p /work
-    mount -t overlay overlay -o "lowerdir=/ro:${pfslayers},upperdir=/rw,workdir=/work" $ROOTFS_DIR
+    mkdir -p /rw/.work
+    mkdir -p /rw/up
+    if [ ${numpatches} != 0 ]; then
+        mount -t overlay overlay -o "lowerdir=/ro:${patch_layers},upperdir=/rw/up,workdir=/rw/.work" $ROOTFS_DIR
+    else
+        mount -t overlay overlay -o "lowerdir=/ro,upperdir=/rw/up,workdir=/rw/.work" $ROOTFS_DIR
+    fi
     if [ $? != 0 ]; then
-        fatal "ERROR: mount -t aufs failed"
+        fatal "ERROR: mount -t overlayfs failed"
     fi
 
     # Move the /ro and /rw partitions
@@ -104,17 +113,14 @@ mnt_run() {
     if [ $? != 0 ]; then
         fatal "ERROR: cd ${ROOTFS_DIR} failed"
     fi
-    if [ "${bootparam_imgdev}" == "/media/sda2" ]; then
-        ln -sf ./media/sda2 APP 
-        if [ $? != 0 ]; then
-            fatal "ERROR: ln /media/sda2 failed"
-        fi
-        ln -sf ./media/sda1 BOOT
-        if [ $? != 0 ]; then
-            fatal "ERROR: ln /media/sda1 failed"
-        fi
-    else
-        echo "Unknown imgdev : ${bootparam_imgdev}"
+        
+    ln -sf ./media/sda2 APP 
+    if [ $? != 0 ]; then
+        fatal "ERROR: ln /media/sda2 failed"
+    fi
+    ln -sf ./media/sda1 BOOT
+    if [ $? != 0 ]; then
+        fatal "ERROR: ln /media/sda1 failed"
     fi
 
     if [ -e $INITLOG ]; then
