@@ -17,26 +17,26 @@ mnt_run() {
     # Bottom: read-only squashfs
     # Middle: read-only stack of PATCHES/xx dirs (if exists)
     # Top: read-write tmpfs
-    mkdir -p /ro
+    mkdir -p /rootfs.ro
     if [ $? != 0 ]; then
-        fatal "ERROR: mkdir /ro failed"
+        fatal "ERROR: mkdir /rootfs.ro failed"
     fi
-    mkdir -p /rw
+    mkdir -p /rootfs.rw
     if [ $? != 0 ]; then
-        fatal "ERROR: mkdir /rw failed"
+        fatal "ERROR: mkdir /rootfs.rw failed"
     fi
 
     bootparam_imgdir=$(basename $(readlink -f ${BOOT_DEV}/${bootparam_imgdir}))
     imgdir=${APP_DEV}/${bootparam_imgdir}
 
     # Mount the filesystem image as read-only:
-    mount -o loop,ro ${imgdir}/${IMG} /ro
+    mount -o loop,ro ${imgdir}/${IMG} /rootfs.ro
     if [ $? != 0 ]; then
         fatal "ERROR: mount -o loop,ro failed"
     fi
 
     # Create a read-write partition:
-    mount -t tmpfs -o size=64m tmpfs /rw
+    mount -t tmpfs -o rw,noatime,mode=755,size=64m tmpfs /rootfs.rw
     if [ $? != 0 ]; then
         fatal "ERROR: mount -t tmpfs failed"
     fi
@@ -65,12 +65,12 @@ mnt_run() {
         
     # Combine the three (/ro + PATCHES/xx + /rw) in overlay.
     # Note that PFSxx may be empty if there are no patches present.
-    mkdir -p /rw/.work
-    mkdir -p /rw/up
+    mkdir -p /rootfs.rw/.work
+    mkdir -p /rootfs.rw/up
     if [ ${numpatches} != 0 ]; then
-        mount -t overlay overlay -o "lowerdir=/ro:${patch_layers},upperdir=/rw/up,workdir=/rw/.work" $ROOTFS_DIR
+        mount -t overlay overlay -o "lowerdir=${patch_layers}:/rootfs.ro,upperdir=/rootfs.rw/up,workdir=/rootfs.rw/.work" $ROOTFS_DIR
     else
-        mount -t overlay overlay -o "lowerdir=/ro,upperdir=/rw/up,workdir=/rw/.work" $ROOTFS_DIR
+        mount -t overlay overlay -o "lowerdir=/rootfs.ro,upperdir=/rootfs.rw/up,workdir=/rootfs.rw/.work" $ROOTFS_DIR
     fi
     if [ $? != 0 ]; then
         fatal "ERROR: mount -t overlayfs failed"
@@ -79,13 +79,13 @@ mnt_run() {
     # Move the /ro and /rw partitions
     mkdir -p $ROOTFS_DIR/mnt/ro
     mkdir -p $ROOTFS_DIR/mnt/rw
-    mount --move /ro $ROOTFS_DIR/mnt/ro
+    mount --move /rootfs.ro $ROOTFS_DIR/mnt/ro
     if [ $? != 0 ]; then
-        fatal "ERROR: mount --move /ro failed"
+        fatal "ERROR: mount --move /rootfs.ro failed"
     fi
-    mount --move /rw $ROOTFS_DIR/mnt/rw
+    mount --move /rootfs.rw $ROOTFS_DIR/mnt/rw
     if [ $? != 0 ]; then
-        fatal "ERROR: mount --move /rw failed"
+        fatal "ERROR: mount --move /rootfs.rw failed"
     fi
 
     # Check to see if actually mounted, dir could exist but not mounted,
@@ -126,6 +126,6 @@ mnt_run() {
     if [ -e $INITLOG ]; then
         mv $INITLOG ${ROOTFS_DIR}/tmp/
     fi
-    
+   
     cd /
 }

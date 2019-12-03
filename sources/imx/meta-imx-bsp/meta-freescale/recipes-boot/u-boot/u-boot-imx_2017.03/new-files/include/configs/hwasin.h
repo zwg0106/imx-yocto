@@ -128,12 +128,13 @@
 	CONFIG_MFG_ENV_SETTINGS \
 	TEE_ENV \
 	"script=boot.scr\0" \
-	"image=zImage\0" \
+	"image=boot.imgdir/zImage\0" \
 	"console=ttymxc0\0" \
 	"fdt_high=0xffffffff\0" \
 	"initrd_high=0xffffffff\0" \
-	"fdt_file=hwasin-emmc.dtb\0" \
+	"fdt_file=boot.imgdir/zImage.dtb\0" \
 	"fdt_addr=0x83000000\0" \
+	"initramfs=boot.imgdir/initramfs.u-boot\0" \
 	"ramdisk_addr=0x83800000\0" \
 	"ramdisk_size=2000000\0" \
 	"ramdiskfile=rootfs.ext2.gz.uboot\0" \
@@ -148,28 +149,24 @@
 	"mmcautodetect=yes\0" \
 	"mmcargs=setenv bootargs console=${console},${baudrate} " \
 		BOOTARGS_CMA_SIZE \
-		"root=${mmcroot}\0" \
+		"imgdir=boot.imgdir\0" \
 	"loadbootscript=" \
 		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
 		"source\0" \
-	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
-	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
-	"loadtee=fatload mmc ${mmcdev}:${mmcpart} ${tee_addr} ${tee_file}\0" \
+	"loadimage=ext4load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
+	"loadfdt=ext4load mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
+	"loadinitramfs=ext4load mmc ${mmcdev}:${mmcpart} ${initrd_addr} ${initramfs}\0" \
+	"load_ext4=run loadfdt; run loadimage; run loadinitramfs\0" \
+	"loadtee=ext4load mmc ${mmcdev}:${mmcpart} ${tee_addr} ${tee_file}\0" \
 	"mmcboot=echo Booting from mmc ...; " \
 		"run mmcargs; " \
 		"if test ${tee} = yes; then " \
 			"run loadfdt; run loadtee; bootm ${tee_addr} - ${fdt_addr}; " \
 		"else " \
 			"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
-				"if run loadfdt; then " \
-					"bootz ${loadaddr} - ${fdt_addr}; " \
-				"else " \
-					"if test ${boot_fdt} = try; then " \
-						"bootz; " \
-					"else " \
-						"echo WARN: Cannot load the DT; " \
-					"fi; " \
+				"if run load_ext4; then " \
+					"bootz ${loadaddr} ${initrd_addr} ${fdt_addr}; " \
 				"fi; " \
 			"else " \
 				"bootz; " \
