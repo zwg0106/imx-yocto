@@ -6,6 +6,7 @@ SRC_URI += " \
             file://20_volatiles                 \
             file://umountfs                     \
             file://bootmisc.patch               \
+            file://app-path.sh                  \
             "
 
 RDEPENDS_${PN} += "bash"
@@ -27,6 +28,9 @@ do_install_append() {
     install -m 0644 ${WORKDIR}/20_volatiles  ${D}${sysconfdir}/default/volatiles
     install -m 0755 ${S}/populate-volatile.sh ${D}${sysconfdir}/init.d
     install -m 0755 ${S}/bootmisc.sh ${D}${sysconfdir}/init.d
+
+    install -d ${D}/etc/profile.d
+    install -m 0644 ${WORKDIR}/app-path.sh ${D}/etc/profile.d/app-path.sh
 }
 
 PR := "${PR}.3"
