@@ -96,9 +96,11 @@
 #define CONFIG_RAMBOOTCOMMAND               \
     "setenv bootargs root=/dev/ram rw ramdisk_size=$ramdisk_size "     \
     "console=$console,$baudrate $othbootargs;"   \
+    "setenv ramdisk_image zImage;"   \
+    "setenv ramdisk_fdt_file hwasin-emmc.dtb;"   \
     "tftp $ramdisk_addr $ramdiskfile;"       \
-    "tftp $loadaddr $image;"         \
-    "tftp $fdt_addr $fdt_file;"           \
+    "tftp $loadaddr $ramdisk_image;"         \
+    "tftp $fdt_addr $ramdisk_fdt_file;"           \
     "bootz $loadaddr $ramdisk_addr $fdt_addr"
 
 #if defined(CONFIG_NAND_BOOT)

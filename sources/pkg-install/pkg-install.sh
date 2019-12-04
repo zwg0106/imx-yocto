@@ -193,11 +193,19 @@ function showInfo()
     printf "$fmt" "Status"   "Partition" "Image"
     printf "$fmt" "==========" "==========" "=================================================="
 
-    source ${currentApp}/${currentPartition}/${IMAGE_INFO}
-    printf "$fmt" "Active" ${currentPartition} ${ImageName}
+    if [ -e ${currentApp}/${currentPartition}/${IMAGE_INFO} ]; then
+        source ${currentApp}/${currentPartition}/${IMAGE_INFO}
+        printf "$fmt" "Active" ${currentPartition} ${ImageName}
+    else
+        mecho "ERROR: No current partition image"
+    fi
 
-    source ${currentApp}/${nextPartition}/${IMAGE_INFO}
-    printf "$fmt" "Standby" ${nextPartition} ${ImageName}
+    if [ -e ${currentApp}/${nextPartition}/${IMAGE_INFO} ]; then
+        source ${currentApp}/${nextPartition}/${IMAGE_INFO}
+        printf "$fmt" "Standby" ${nextPartition} ${ImageName}
+    else 
+        mecho "ERROR: No next partition image"
+    fi
 }
 
 function umountRootfsImage()
