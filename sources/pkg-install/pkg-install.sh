@@ -2,8 +2,6 @@
 
 umask 022
 
-set -x
-
 mlog=/var/log/pkg-install.log
 
 function mecho()
@@ -143,29 +141,63 @@ function findCurrentPartitionAndMedia()
         mexit 1
     else
         currentMedia=$(echo -n ${imgdev} | tr -d "12")
-        currentPartition="${imgdir}"
-    fi
-
-    # next partition
-    if [ "x${currentPartition}" == "ximgx" ]; then
-        nextPartition=imgy
-    elif [ "x${currentPartition}" == "ximgy" ]; then
-        nextPartition=imgx
-    elif [ "x${currentMedia}" == "x/dev/ram" ]; then
-        # for ramdisk
-        currentPartition=imgx
-        nextPartition=imgx
-        return 0
-    else
-        mecho "ERROR: No ${currentMedia}, ${currentPartition}"
-        mecho "ERROR: Cannot find current partition. Aborting installation."
-        mexit 1
+		if [ "x${currentMedia}" == "x/dev/ram" ]; then
+			# for ramdisk
+			currentPartition=imgx
+			nextPartition=imgx
+			return 0
+		else
+			if [ ! -z "${imgdir}" ]; then
+				currentPartition="$(basename $(readlink -f ${currentMedia}1/${imgdir}))"
+			else
+				mecho "ERROR: Cannot find current partition. Aborting installation."
+				mexit 1
+			fi
+			nextPartition=${currentPartition}
+		fi
     fi
 
     currentBoot=${currentMedia}1
     currentApp=${currentMedia}2
 
    	installMedia="/media/sda"
+}
+
+function setNextPartition()
+{
+    # next partition
+    if [ "x${currentPartition}" == "ximgx" ]; then
+        nextPartition=imgy
+    elif [ "x${currentPartition}" == "ximgy" ]; then
+        nextPartition=imgx
+    else
+        mecho "ERROR: No ${currentMedia}, ${currentPartition}"
+        mecho "ERROR: Cannot find current partition. Aborting installation."
+        mexit 1
+    fi
+}
+
+function showInfo()
+{
+    setNextPartition
+
+    mecho "====================================="
+    mecho "Current media:       ${currentMedia}"
+    mecho "Current boot:        ${currentBoot}"
+    mecho "Current app:         ${currentApp}"
+    mecho "Active partition:    ${currentPartition}"
+    mecho "Standby partition:   ${nextPartition}"
+    mecho "====================================="
+
+    local fmt="%-10s %-10s %-50s \n"
+    printf "$fmt" "Status"   "Partition" "Image"
+    printf "$fmt" "==========" "==========" "=================================================="
+
+    source ${currentApp}/${currentPartition}/${IMAGE_INFO}
+    printf "$fmt" "Active" ${currentPartition} ${ImageName}
+
+    source ${currentApp}/${nextPartition}/${IMAGE_INFO}
+    printf "$fmt" "Standby" ${nextPartition} ${ImageName}
 }
 
 function umountRootfsImage()
@@ -275,13 +307,28 @@ function setNextBootPartition()
 
 	mecho "Creating boot partition links..."
 	cd ${media}1
-	ln -sf ${part} boot.imgdir
+	ln -sfn ${part} boot.imgdir
 	
 	sync;sync
+    
+    mecho "Next boot partition is ${part}"
 	
 	cd ${olddir}
 }
 
+function switchBootPartition()
+{
+    if [ "x${nextPartition}" == "ximgx" ]; then
+        nextPartition=imgy
+    elif [ "x${nextPartition}" == "ximgy" ]; then
+        nextPartition=imgx
+    else
+        mecho "No next partition. switch failed"
+        mexit 1
+    fi
+
+    setNextBootPartition ${currentMedia} ${nextPartition}
+}
 
 function parseCmdline()
 {
@@ -289,14 +336,9 @@ function parseCmdline()
 
     for l in ${cmd};do
         case "${l}" in
-            imgdev\=*)
-                eval $l
-                ;;
             imgdir\=*)
                 eval $l
-                ;;
-            img\=*)
-                eval $l
+                imgdev=/media/sda2
                 ;;
             root\=*)
                 eval $l
@@ -305,7 +347,6 @@ function parseCmdline()
                 ;;
         esac
     done
-    mecho "parseCmdline: imgdev=${imgdev}, imgdir=${imgdir}, img=${img}"
 }
 
 
@@ -324,13 +365,14 @@ man="
     $myRealName
 
  SYNOPSIS
-    $myRealName [-h] [-i] [--recover]
+    $myRealName [-h] [-i] [-r] [-s]
 
  DESCRIPTION
     This script installs package images into one or more partitions to emmc.
     For image upgrades:
        -r               	   : recover from ramdisk image.
        -h                      : show this Help
+       -s                      : switch to alternative boot partition
        -i                      : show Information about current partition status
  EXAMPLES
     (1) Install rootfs image in current dir to standby partition and make it primary:
@@ -359,17 +401,22 @@ UBOOT_LINK_NAME=u-boot-${MACHINE}.imx
 KERNEL_LINK_NAME=zImage-${MACHINE}.bin
 DTS_LINK_NAME=zImage-${MACHINE}-emmc.dtb
 INITRAMFS_LINK_NAME=imx-image-initramfs-${MACHINE}.cpio.gz.u-boot
+IMAGE_INFO=image_info
 
+reqRecover=0
+reqShowInfo=0
+reqSwitchPartition=0
 ########################################################################
 #                             OPTION
 ########################################################################
 
 
-while getopts "rih" options
+while getopts "rish" options
 do
     case $options in
 		r) reqRecover=1;;
 		i) reqShowInfo=1;;
+		s) reqSwitchPartition=1;;
        	h) showUsage; OPTIND=0; exit 0;;
         *) showUsage; OPTIND=0; exit 0;;
 
@@ -379,6 +426,16 @@ done
 parseCmdline
 
 findCurrentPartitionAndMedia
+
+if [ ${reqSwitchPartition} == 1 ]; then
+    switchBootPartition        
+    mexit 0
+fi
+
+if [ ${reqShowInfo} == 1 ]; then
+    showInfo
+    mexit 0
+fi
 
 if [ ${reqRecover} == 1 ]; then
     mecho "recover request"
@@ -393,6 +450,8 @@ if [ ${reqRecover} == 1 ]; then
     [ ! -d ${installMedia}2 ] && mkdir ${installMedia}2
     mount -v -t ext4 ${newDevBoot} ${installMedia}1
     mount -v -t ext4 ${newDevApp} ${installMedia}2
+else
+	setNextPartition
 fi
 
 mountRootfsImage

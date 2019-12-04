@@ -44,11 +44,13 @@ imx_rootfs_postprocess() {
         BuildUser="${USER}"
     fi
 
+    IMG_NAME=Package_imx6u_${PLATFORM}_${ts}_${BuildUser}.run
+
     echo "====================="
     echo ${IMAGE_ROOTFS}
     echo "====================="
     echo "Machine=${PLATFORM}"                  >> ${bifile}
-    echo "ImageName=${IMAGE_NAME}"              >> ${bifile}
+    echo "ImageName=${IMG_NAME}"                >> ${bifile}
     echo "Timestamp=\"${timestamp}\""           >> ${bifile}
     echo "BuildUser=${BuildUser}"               >> ${bifile}
 
