@@ -20,6 +20,8 @@ RDEPENDS_packagegroup-3rdparty = "\
     mmc-utils               \
     opentftp                \
     openssh                 \
+    xinetd                  \
+    netkit-telnet           \
     i2c-tools               \
     usbutils                \
     iputils                 \

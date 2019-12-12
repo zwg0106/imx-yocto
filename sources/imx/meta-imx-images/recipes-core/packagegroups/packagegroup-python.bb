@@ -21,4 +21,5 @@ RDEPENDS_packagegroup-python = "\
     python3-shell           \
     python3-threading       \
     python3-pexpect         \
+    python3-prompt-toolkit  \
         "
