@@ -18,5 +18,6 @@ RDEPENDS_packagegroup-base = "\
 SUMMARY_packagegroup-hwasin = "hwasin specific"
 DESCRIPTION_packagegroup-hwasin = "Packages required on the hwasin platform"
 RDEPENDS_packagegroup-hwasin = "\
-    pkg-install       \
+    pkg-install         \
+    ebf-demo            \
     "

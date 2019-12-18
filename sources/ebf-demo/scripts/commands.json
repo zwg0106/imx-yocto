@@ -1,0 +1,23 @@
+{
+    "show":{
+        "-h":null,
+        "--help":null,
+        "version":{
+            "--Active":null,
+            "--Standby":null
+        },
+        "led":{
+            "Green":null,
+            "Red":null,
+            "Bule":null
+        }
+    },
+    "config":{
+        "led":{
+            "Green":null,
+            "Red":null,
+            "Bule":null
+        }
+    },
+    "exit": null
+}
