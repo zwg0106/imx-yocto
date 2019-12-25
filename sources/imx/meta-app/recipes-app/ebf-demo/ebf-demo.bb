@@ -3,7 +3,7 @@ SECTION = "base"
 DEPENDS = ""
 LICENSE = "IMX"
 
-RDEPENDS_${PN} = "python3"
+RDEPENDS_${PN} += "python3-core"
 
 PR = "r0"
 # Major.Minor.Patch-prerelease
