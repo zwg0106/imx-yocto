@@ -50,6 +50,10 @@
                 "--Enable":null,
                 "--Disable":null
             }
+        },
+        "beep": {
+            "--On": null,
+            "--Off": null
         }
     },
     "exit": null

@@ -2,6 +2,7 @@
 
 from ebf_config_led_cmd import EbfConfigLedCmd
 from ebf_config_input_cmd import EbfConfigInputCmd
+from ebf_config_beep_cmd import EbfConfigBeepCmd
 
 from logger import ebf_logger
 LOGGER = ebf_logger(__name__)
@@ -17,7 +18,8 @@ class EbfConfigManager(object):
     def getCmdObject(self):
         cmdObjectList = {
             "led": "led",
-            "input": "input"
+            "input": "input",
+            "beep": "beep"
         }
 
         methodName = None
@@ -25,6 +27,11 @@ class EbfConfigManager(object):
             methodName = "led"
         elif self.args["input"]:
             methodName = "input"
+        elif self.args["beep"]:
+            methodName = "beep"
+        else:
+            LOGGER.error("Unknown device")
+            return
 
         LOGGER.debug(methodName)
         if methodName in cmdObjectList:
@@ -42,3 +49,7 @@ class EbfConfigManager(object):
     def input(self):
         LOGGER.debug(self.args)
         return EbfConfigInputCmd(self.args)
+    
+    def beep(self):
+        LOGGER.debug(self.args)
+        return EbfConfigBeepCmd(self.args)

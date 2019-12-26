@@ -4,6 +4,7 @@
 Usage:
     config led (--Green | --Red | --Blue | --All) (--ON | --OFF | --BLINK)
     config input (--Key | --OnOff | --All) (--Enable | --Disable)
+    config beep (--On | --Off)
     config -h | --help
 Options:
     -h --help:  show usage

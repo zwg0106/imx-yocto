@@ -7,6 +7,7 @@ Usage:
     show -h | --help
     config led (--Green | --Red | --Blue | --All) (--ON | --OFF | --BLINK)
     config input (--Key | --OnOff | --All) (--Enable | --Disable)
+    config beep (--On | --Off)
     exit
 Options:
     -h --help:  show usage
