@@ -25,6 +25,7 @@ from ebf_show_cmd import EbfShowCmd
 from ebf_show_manager import EbfShowManager
 from ebf_config_cmd import EbfConfigCmd
 from ebf_config_manager import EbfConfigManager
+from ebf_exit_cmd import EbfExitCmd
 
 from logger import ebf_logger
 LOGGER = ebf_logger(__name__)
@@ -74,3 +75,9 @@ class EbfManager(object):
         LOGGER.debug(args)
         if args:
             return EbfConfigManager(args).getCmdObject()
+
+    def exit(self):
+        args, doc = EbfExitCmd(self.cmd).execute()
+        LOGGER.debug(args)
+        if args:
+            self.isHelp(args, doc)
