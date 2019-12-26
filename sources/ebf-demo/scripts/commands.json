@@ -4,19 +4,52 @@
         "--help":null,
         "version":{
             "--Active":null,
-            "--Standby":null
+            "--Standby":null,
+            "--All":null
         },
         "led":{
-            "Green":null,
-            "Red":null,
-            "Bule":null
+            "--Green":null,
+            "--Red":null,
+            "--Blue":null,
+            "--All":null
         }
     },
     "config":{
         "led":{
-            "Green":null,
-            "Red":null,
-            "Bule":null
+            "--Green": {
+                "--ON":null,
+                "--OFF":null,
+                "--BLINK":null
+            },
+            "--Red": {
+                "--ON":null,
+                "--OFF":null,
+                "--BLINK":null
+            },
+            "--Blue": {
+                "--ON":null,
+                "--OFF":null,
+                "--BLINK":null
+            },
+            "--All": {
+                "--ON":null,
+                "--OFF":null,
+                "--BLINK":null
+            }
+        },
+        "input": {
+            "--OnOff":{
+                "--Enable":null,
+                "--Disable":null
+            },
+            "--Key":{
+                "--Enable":null,
+                "--Disable":null
+            },
+            "--All":{
+                "--Enable":null,
+                "--Disable":null
+            }
         }
     },
     "exit": null

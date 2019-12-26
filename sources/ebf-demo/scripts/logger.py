@@ -11,6 +11,7 @@ def ebf_logger(mod_name):
         "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
     datefmt = '%Y-%m-%d %H:%M:%S'
 
+    logger.setLevel(logging.DEBUG)
     handler = logging.handlers.RotatingFileHandler(LOG_FILENAME, mode='a', maxBytes=1000000, encoding=None, delay=0)
     handler.setLevel(logging.DEBUG)
     handler.setFormatter(logging.Formatter(formatter))

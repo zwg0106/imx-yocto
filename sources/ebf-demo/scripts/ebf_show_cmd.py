@@ -2,13 +2,17 @@
 
 """
 Usage:
-    show version [--Active | --Standby]
-    show led [--Green | --Red | --Blue]
+    show version [--Active | --Standby | --All]
+    show led [--Green | --Red | --Blue | --All]
     show -h | --help
 Options:
     -h --help:  show usage
     --Active: active partition
     --Standby: standby partition
+    --Green: green led
+    --Blue: blue led
+    --Red: red led
+    --All: all partitions/leds
 """
 
 from docopt import docopt, DocoptExit, DocoptLanguageError
@@ -16,8 +20,9 @@ from docopt import docopt, DocoptExit, DocoptLanguageError
 from logger import ebf_logger
 LOGGER=ebf_logger(__name__)
 
+from ebf_cmd import EbfCmd
 
-class EbfShowCommand(object):
+class EbfShowCmd(EbfCmd):
     """
     handle show command
     """
@@ -37,4 +42,3 @@ class EbfShowCommand(object):
         except DocoptExit as e:
             LOGGER.error(e)
             return None, None
-    

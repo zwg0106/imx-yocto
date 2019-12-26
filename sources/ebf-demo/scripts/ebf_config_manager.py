@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-from ebf_show_version_cmd import EbfShowVersionCmd
-from ebf_show_led_cmd import EbfShowLedCmd
+from ebf_config_led_cmd import EbfConfigLedCmd
+from ebf_config_input_cmd import EbfConfigInputCmd
 
 from logger import ebf_logger
 LOGGER = ebf_logger(__name__)
 
 
-class EbfShowManager(object):
+class EbfConfigManager(object):
 
     args = None
 
@@ -16,15 +16,15 @@ class EbfShowManager(object):
 
     def getCmdObject(self):
         cmdObjectList = {
-            "version": "version",
-                "led": "led"
+            "led": "led",
+            "input": "input"
         }
 
         methodName = None
-        if self.args["version"]:
-            methodName = "version"
-        elif self.args["led"]:
+        if self.args["led"]:
             methodName = "led"
+        elif self.args["input"]:
+            methodName = "input"
 
         LOGGER.debug(methodName)
         if methodName in cmdObjectList:
@@ -34,10 +34,11 @@ class EbfShowManager(object):
             LOGGER.error("Invalid command")
             LOGGER.error(__doc__)
 
-    def version(self):
-        LOGGER.debug(self.args)
-        return EbfShowVersionCmd(self.args)
 
     def led(self):
         LOGGER.debug(self.args)
-        return EbfShowLedCmd(self.args)
+        return EbfConfigLedCmd(self.args)
+    
+    def input(self):
+        LOGGER.debug(self.args)
+        return EbfConfigInputCmd(self.args)

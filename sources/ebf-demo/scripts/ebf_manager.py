@@ -2,19 +2,28 @@
 
 """
 Usage:
-    show version [--Active | --Standby]
-    show led [--Green | --Red | --Blue]
+    show version [--Active | --Standby | --All]
+    show led [--Green | --Red | --Blue | --All]
     show -h | --help
-    config led (Green|Red|Blue) (ON|OFF|BLINK)
+    config led (--Green | --Red | --Blue | --All) (--ON | --OFF | --BLINK)
+    config input (--Key | --OnOff | --All) (--Enable | --Disable)
     exit
 Options:
     -h --help:  show usage
     --Active: active partition
     --Standby: standby partition
+    --Green: green led
+    --Blue: blue led
+    --Red: red led
+    --All: all partitions/leds/keys
+    --Enable: enable to monitor keys
+    --Disable: disable to monitor keys
 """
 
-from ebf_show_command import EbfShowCommand
+from ebf_show_cmd import EbfShowCmd
 from ebf_show_manager import EbfShowManager
+from ebf_config_cmd import EbfConfigCmd
+from ebf_config_manager import EbfConfigManager
 
 from logger import ebf_logger
 LOGGER = ebf_logger(__name__)
@@ -52,8 +61,15 @@ class EbfManager(object):
         return args
 
     def show(self):
-        args, doc = EbfShowCommand(self.cmd).execute()
+        args, doc = EbfShowCmd(self.cmd).execute()
         args = self.isHelp(args, doc)
         LOGGER.debug(args)
         if args:
             return EbfShowManager(args).getCmdObject()
+
+    def config(self):
+        args, doc = EbfConfigCmd(self.cmd).execute()
+        args = self.isHelp(args, doc)
+        LOGGER.debug(args)
+        if args:
+            return EbfConfigManager(args).getCmdObject()

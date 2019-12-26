@@ -23,4 +23,6 @@ RDEPENDS_packagegroup-python = "\
     python3-pexpect         \
     python3-prompt-toolkit  \
     python3-docopt          \
+    python3-pickle          \
+    python3-evdev           \
         "

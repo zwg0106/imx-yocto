@@ -1,20 +1,25 @@
 #!/usr/bin/python3
 
+import os
 import re
 import json
+from threading import Thread
+from select import select
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.history import FileHistory
 from ebf_manager import EbfManager
+from threadPoll import ThreadPollDevice
 
 from logger import ebf_logger
 LOGGER=ebf_logger(__name__)
 
-
 CMDJSONFILE="commands.json"
-if CMDJSONFILE:
-    with open (CMDJSONFILE, 'r') as jsonFile:
-        cmdJsonData = jsonFile.read()
+dataPath=os.path.dirname(os.path.realpath(__file__))
+jsonFile = dataPath + '/' + CMDJSONFILE
+if os.path.isfile(jsonFile):
+    with open (jsonFile, 'r') as fp:
+        cmdJsonData = fp.read()
     ebfCmdList = json.loads(cmdJsonData)
 
 
@@ -81,7 +86,7 @@ class ebfShell:
             while True:
                 try:
                     userInput = prompt(u'\nebf> ', history=FileHistory('history.txt'), completer=AutoComplete())
-            
+                    
                     if userInput:
                         cmd = userInput.split()
                         if not cmd:
@@ -100,9 +105,14 @@ class ebfShell:
 		
         except Exception as e:
             LOGGER.error("ERR")
+            errorStr = "[%s]: %s" % (str(e.errno), e.message)
+            LOGGER.error(errorStr)
             return
 
 
 if __name__ == '__main__':
-    ebfShell()
+    
+    threadPollIns = ThreadPollDevice()
+    threadPollIns.threadStart()
 
+    ebfShell()
