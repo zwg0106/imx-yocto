@@ -19,6 +19,7 @@ RDEPENDS_packagegroup-python = "\
     python3-threading       \
     python3-prompt-toolkit  \
     python3-docopt          \
+    python3-pickle          \
     python3-evdev           \
     python3-smbus           \
         "
