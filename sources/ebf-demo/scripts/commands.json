@@ -2,6 +2,7 @@
     "show":{
         "-h":null,
         "--help":null,
+        "mpu6050": null,
         "version":{
             "--Active":null,
             "--Standby":null,
