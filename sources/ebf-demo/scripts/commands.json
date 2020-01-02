@@ -3,6 +3,7 @@
         "-h":null,
         "--help":null,
         "mpu6050": null,
+        "adc": null,
         "version":{
             "--Active":null,
             "--Standby":null,

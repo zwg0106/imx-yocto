@@ -3,6 +3,7 @@
 from ebf_show_version_cmd import EbfShowVersionCmd
 from ebf_show_led_cmd import EbfShowLedCmd
 from ebf_show_mpu6050_cmd import EbfShowMpu6050Cmd
+from ebf_show_adc_cmd import EbfShowAdcCmd
 
 from logger import ebf_logger
 LOGGER = ebf_logger(__name__)
@@ -19,7 +20,8 @@ class EbfShowManager(object):
         cmdObjectList = {
             "version": "version",
                 "led": "led",
-                "mpu6050": "mpu6050"
+                "mpu6050": "mpu6050",
+                "adc": "adc"
         }
 
         methodName = None
@@ -29,6 +31,8 @@ class EbfShowManager(object):
             methodName = "led"
         elif self.args["mpu6050"]:
             methodName = "mpu6050"
+        elif self.args["adc"]:
+            methodName = "adc"
 
         LOGGER.debug(methodName)
         if methodName in cmdObjectList:
@@ -49,3 +53,7 @@ class EbfShowManager(object):
     def mpu6050(self):
         LOGGER.debug(self.args)
         return EbfShowMpu6050Cmd(self.args)
+    
+    def adc(self):
+        LOGGER.debug(self.args)
+        return EbfShowAdcCmd(self.args)

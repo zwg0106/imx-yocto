@@ -5,6 +5,7 @@ Usage:
     show version [--Active | --Standby | --All]
     show led [--Green | --Red | --Blue | --All]
     show mpu6050 
+    show adc 
     show -h | --help
     config led (--Green | --Red | --Blue | --All) (--ON | --OFF | --BLINK)
     config input (--Key | --OnOff | --All) (--Enable | --Disable)
