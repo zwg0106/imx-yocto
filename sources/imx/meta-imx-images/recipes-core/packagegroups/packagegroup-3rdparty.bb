@@ -51,4 +51,5 @@ RDEPENDS_packagegroup-3rdparty = "\
 	expect					\
 	lsof					\
 	makeself				\
+	bc				        \
         "
