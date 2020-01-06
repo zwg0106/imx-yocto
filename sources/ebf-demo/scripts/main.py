@@ -9,7 +9,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.history import FileHistory
 from ebf_manager import EbfManager
-from threadPoll import ThreadPollDevice
+from keyPoll import PollKeyDevice
 
 from logger import ebf_logger
 LOGGER=ebf_logger(__name__)
@@ -112,7 +112,7 @@ class ebfShell:
 
 if __name__ == '__main__':
     
-    threadPollIns = ThreadPollDevice()
-    threadPollIns.threadStart()
+    keyPollIns = PollKeyDevice()
+    keyPollIns.threadStart()
 
     ebfShell()

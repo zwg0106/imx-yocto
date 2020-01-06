@@ -17,12 +17,12 @@ inputKeyDict = {
 }
 
 
-class ThreadPollDevice(object):
+class PollKeyDevice(object):
     pollPipe = os.pipe()
 
     def __init__(self):
         self.inputFd = []
-        LOGGER.debug("Init ThreadPollDevice")
+        LOGGER.debug("Init PollKeyDevice")
 
     def threadStart(self):
 

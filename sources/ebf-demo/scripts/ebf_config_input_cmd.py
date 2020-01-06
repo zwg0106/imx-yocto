@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import os
-from threadPoll import ThreadPollDevice
+from keyPoll import PollKeyDevice
 
 from logger import ebf_logger
 LOGGER = ebf_logger(__name__)
@@ -45,7 +45,7 @@ class EbfConfigInputCmd(EbfConfigCmd):
        
         LOGGER.debug("Update devices: %s", dev)
         if dev:
-            ThreadPollDevice.writePipe(dev)
+            PollKeyDevice.writePipe(dev)
         else:
             LOGGER.error("Incorrect input devices args")
 
