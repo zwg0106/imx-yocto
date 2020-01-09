@@ -4,12 +4,12 @@
 Usage:
     show version [--Active | --Standby | --All]
     show led [--Green | --Red | --Blue | --All]
-    show mpu6050 
     show adc 
     show -h | --help
     config led (--Green | --Red | --Blue | --All) (--ON | --OFF | --BLINK)
     config input (--Key | --OnOff | --All) (--Enable | --Disable)
     config beep (--On | --Off)
+    config mpu6050 (--Enable | --Disable)
     exit
 Options:
     -h --help:  show usage
@@ -19,8 +19,8 @@ Options:
     --Blue: blue led
     --Red: red led
     --All: all partitions/leds/keys
-    --Enable: enable to monitor keys
-    --Disable: disable to monitor keys
+    --Enable: enable device 
+    --Disable: disable device
 """
 
 from ebf_show_cmd import EbfShowCmd

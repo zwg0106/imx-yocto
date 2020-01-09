@@ -2,7 +2,6 @@
     "show":{
         "-h":null,
         "--help":null,
-        "mpu6050": null,
         "adc": null,
         "version":{
             "--Active":null,
@@ -56,6 +55,10 @@
         "beep": {
             "--On": null,
             "--Off": null
+        },
+        "mpu6050": {
+            "--Enable": null,
+            "--Disable": null
         }
     },
     "exit": null

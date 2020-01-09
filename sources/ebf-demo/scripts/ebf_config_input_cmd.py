@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import os
-from keyPoll import PollKeyDevice
+from key_poll import PollKeyDevice
 
 from logger import ebf_logger
 LOGGER = ebf_logger(__name__)

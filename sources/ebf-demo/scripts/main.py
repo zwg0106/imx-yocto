@@ -9,7 +9,8 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.history import FileHistory
 from ebf_manager import EbfManager
-from keyPoll import PollKeyDevice
+from key_poll import PollKeyDevice
+from mpu_server import MpuServer
 
 from logger import ebf_logger
 LOGGER=ebf_logger(__name__)
@@ -114,5 +115,8 @@ if __name__ == '__main__':
     
     keyPollIns = PollKeyDevice()
     keyPollIns.threadStart()
+
+    mpuIns = MpuServer()
+    mpuIns.threadStart()
 
     ebfShell()

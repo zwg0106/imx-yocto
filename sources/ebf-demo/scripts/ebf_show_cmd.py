@@ -4,7 +4,6 @@
 Usage:
     show version [--Active | --Standby | --All]
     show led [--Green | --Red | --Blue | --All]
-    show mpu6050
     show adc 
     show -h | --help
 Options:

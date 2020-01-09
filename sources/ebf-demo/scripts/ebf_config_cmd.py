@@ -5,6 +5,7 @@ Usage:
     config led (--Green | --Red | --Blue | --All) (--ON | --OFF | --BLINK)
     config input (--Key | --OnOff | --All) (--Enable | --Disable)
     config beep (--On | --Off)
+    config mpu6050 (--Enable | --Disable)
     config -h | --help
 Options:
     -h --help:  show usage
@@ -12,8 +13,8 @@ Options:
     --Blue: blue led
     --Red: red led
     --All: all leds/keys
-    --Enable: enable to monitor keys
-    --Disable: disable to monitor keys
+    --Enable: enable device
+    --Disable: disable device
 """
 
 from docopt import docopt, DocoptExit, DocoptLanguageError
