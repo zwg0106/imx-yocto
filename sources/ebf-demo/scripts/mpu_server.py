@@ -12,10 +12,9 @@ from logger import ebf_logger
 LOGGER = ebf_logger(__name__)
 
 #default udp port
-#DEFAULT_IP_PORT = ("192.168.37.83", 5000)
-DEFAULT_IP_PORT = ("10.245.105.204", 7000)
+DEFAULT_IP_PORT = ("192.168.37.83", 5000)
 
-ITEM = ["filter", "accel", "gyro"]
+ITEM = ["filter", "accel", "temp"]
 
 def toJson(val):
     """
@@ -51,6 +50,7 @@ class MpuServer(object):
         handle pipe data
         send mpu data if enabled by CLI
         """
+        
         timeout = None
 
         while True:
